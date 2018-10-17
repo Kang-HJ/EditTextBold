@@ -1,24 +1,17 @@
 package com.kkang.editorbold;
 
-import android.app.AppOpsManager;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextPaint;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,28 +34,14 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    final String START_BOLD = "<b>";
-    final String END_BOLD = "</b>";
+    //final String START_BOLD = "<bold>";
+    //final String END_BOLD = "</bold>";
+
+    final String START_BOLD = "\u0182";
+    final String END_BOLD = "\u0183";
 
     TextView tvBold;
     EditText et;
-
-    ArrayList<String> normalTxts = new ArrayList<>();
-    ArrayList<String> boldTxts = new ArrayList<>();
-
-    String beforeStr = "";
-    String changeStr = "";
-
-    String thisStr = "";
-
-    int startIdx = 0;
-    int before = 0;
-    int count = 0;
-
-    int lastLegnth = 0;
-
-    boolean isBold = false;
-    boolean delKey = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,22 +54,7 @@ public class MainActivity extends AppCompatActivity {
         tvBold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isBold = !isBold;
-                if (isBold) {
-                    tvBold.setTextColor(Color.RED);
 
-                    if(!thisStr.equals("")) {
-                        normalTxts.add(thisStr);
-                        thisStr = "";
-                    }
-
-                } else {
-                    tvBold.setTextColor(Color.GRAY);
-                    if(!thisStr.equals("")) {
-                        boldTxts.add(thisStr);
-                        thisStr = "";
-                    }
-                }
             }
         });
 
@@ -114,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
             Debug(" start " + start);
             Debug(" count " + count);
             Debug(" after " + after);
-
-            beforeStr = s.toString();
         }
 
         @Override
@@ -134,54 +96,13 @@ public class MainActivity extends AppCompatActivity {
             Debug(" before " + before);
             Debug(" count " + count);
 
-            changeStr = s.toString();
-            MainActivity.this.startIdx = start;
-            MainActivity.this.before = before;
-            MainActivity.this.count = count;
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!beforeStr.equals(s.toString())) {
-                Debug("beforeStr : : " + beforeStr);
-                Debug("changeStr : : " + changeStr);
-                Debug("startIdx : : " + startIdx);
-                Debug("before : : " + before);
-                Debug("count : : " + count);
-                Debug("----------------------------------------");
 
-                if (normalTxts.size() <= 0 && boldTxts.size() <= 0) {
-                    thisStr = s.toString();
-                } else {
-                    if (startIdx+before == beforeStr.length()) {
-                        thisStr += changeStr.substring(startIdx+count-1);
-                    } else {
-
-                    }
-                }
-            }
-            ArrayLog("afterTextChanged");
         }
     };
-
-    private void ArrayLog(String methodName) {
-        String log = "";
-        int i = 0;
-        for (i = 0; i < normalTxts.size(); i++) {
-            log += normalTxts.get(i);
-            if (boldTxts.size() > i) {
-                log += boldTxts.get(i);
-            }
-        }
-        if(boldTxts.size()>i){
-            for(i = i; i<boldTxts.size();i++){
-                log += boldTxts.get(i);
-            }
-        }
-
-        Debug(methodName + " log  : : " + log);
-        Debug(methodName + " thisStr  : : " + thisStr);
-    }
 
     private void setTagAndLinkText(String allStr) {
         Debug(" allStr  " + allStr);
