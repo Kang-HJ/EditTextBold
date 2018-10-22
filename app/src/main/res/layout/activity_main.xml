@@ -12,16 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:background="#f0f0f0"
+        android:background="@android:color/black"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:text="BOLD" />
 
     <EditText
         android:id="@+id/et"
         android:layout_width="match_parent"
+        android:textSize="15sp"
         android:layout_height="match_parent"
         android:gravity="top"
-        android:text="Hello World!"
-        android:textSize="11sp" />
+        android:text="Hello World!" />
 
 </LinearLayout>

@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -34,12 +36,17 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    //final String START_BOLD = "<bold>";
-    //final String END_BOLD = "</bold>";
+    final String START_BOLD = "<b>";
+    final String END_BOLD = "</b>";
 
-    final String START_BOLD = "\u0182";
-    final String END_BOLD = "\u0183";
+//    final String START_BOLD = "\u0182";
+//    final String END_BOLD = "\u0183";
 
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "가 완료됩니다.";
+    String fakeString = originString.replace(START_BOLD, "").replace(END_BOLD, "");
+
+    boolean isBold = false;
     TextView tvBold;
     EditText et;
 
@@ -54,12 +61,69 @@ public class MainActivity extends AppCompatActivity {
         tvBold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isBold) {
+                    tvBold.setBackgroundColor(Color.BLACK);
+                } else {
+                    tvBold.setBackgroundColor(Color.BLUE);
+                }
+                int start = getOriginStartIdx(et.getSelectionStart());
+                int end = getOriginEndIdx(et.getSelectionEnd());
 
+                Debug(" end " + originString.charAt(end));
+                isBold = !isBold;
             }
         });
 
         et.addTextChangedListener(textWatcher);
-        et.setText("");
+
+        et.setText(htmlText());
+    }
+
+    private int getOriginStartIdx(int idx) {
+        int startIdx = idx;
+        Debug(" idx " + idx);
+        String aTagReplacePosition = originString.substring(0, idx);
+
+        int linkOffset = 0;
+        int linkGetIdx = aTagReplacePosition.indexOf(START_BOLD, linkOffset);
+
+        boolean isEndBold = false;
+        while (linkGetIdx >= 0) {
+            isEndBold = false;
+            startIdx += START_BOLD.length();
+            if (aTagReplacePosition.indexOf(END_BOLD, linkGetIdx) >= 0) {
+                idx = idx + END_BOLD.length();
+                startIdx += END_BOLD.length();
+                isEndBold = true;
+            }
+            idx = idx + START_BOLD.length();
+            aTagReplacePosition = originString.substring(0, idx);
+            linkOffset = linkGetIdx + START_BOLD.length();
+            linkGetIdx = aTagReplacePosition.indexOf(START_BOLD, linkOffset);
+        }
+
+        if (!isEndBold) {
+            linkGetIdx = aTagReplacePosition.indexOf(END_BOLD, linkOffset);
+            if (linkGetIdx >= 0) {
+                startIdx += END_BOLD.length();
+            }
+        }
+
+        startIdx -= 1;
+
+        Debug(" startIdx  " + startIdx);
+        try {
+            Debug(" charAt  " + originString.charAt(startIdx));
+        } catch (StringIndexOutOfBoundsException e) {
+            Debug("e  : " + e);
+        }
+
+        return startIdx;
+    }
+
+    private int getOriginEndIdx(int idx) {
+        int endIdx = idx;
+        return endIdx;
     }
 
 
@@ -104,48 +168,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void setTagAndLinkText(String allStr) {
-        Debug(" allStr  " + allStr);
-        int offset = 0;
-        int stringLength = (allStr.replace(START_BOLD, "").replace(END_BOLD, "")).length();
-        String aTagReplceStr = allStr.replace(START_BOLD, "").replace(END_BOLD, "");
-        Spannable wordtoSpan = new SpannableString(aTagReplceStr);
-
-
-        offset = 0;
-
-        int tagStartIndex = (allStr).indexOf(START_BOLD, offset);
-        Debug("allStr length   " + allStr.length());
-
-        while (tagStartIndex != -1) {
-            Debug(" tagStartIndex  " + tagStartIndex);
-            int tagEndSpaceIndex = (allStr).indexOf(END_BOLD, tagStartIndex);
-            if (tagEndSpaceIndex == -1) {
-                tagEndSpaceIndex = allStr.length();
-            }
-            tagEndSpaceIndex += 4;
-
-            tagEndSpaceIndex = tagEndSpaceIndex == -1 ? stringLength : tagEndSpaceIndex;
-            Debug("tagEndSpaceIndex    " + tagEndSpaceIndex);
-
-            offset = tagEndSpaceIndex;
-            final String linkStr;
-            if (allStr.length() >= tagEndSpaceIndex) {
-                linkStr = allStr.substring(tagStartIndex, tagEndSpaceIndex);
-                Debug("lingk  1  " + linkStr);
-            } else {
-                linkStr = allStr.substring(tagStartIndex, allStr.length());
-                Debug("lingk  2  " + linkStr);
-            }
-            int linkStartIdx = aTagReplceStr.indexOf(linkStr.replace(START_BOLD, "").replace(END_BOLD, ""));
-            int linkEndIdx = linkStartIdx + linkStr.replace(START_BOLD, "").replace(END_BOLD, "").length();
-
-            wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), linkStartIdx, linkEndIdx, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            tagStartIndex = (allStr).indexOf(START_BOLD, offset);
-            Debug(" tagStartIndex  " + tagStartIndex);
-        }
-        //lastString = wordtoSpan.toString();
-        et.setText(wordtoSpan);
+    private Spanned htmlText() {
+        Spanned formattedString = Html.fromHtml(originString);
+        return formattedString;
     }
 }
