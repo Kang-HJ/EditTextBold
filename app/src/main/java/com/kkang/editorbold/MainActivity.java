@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
     final String UNI1 = "\u0182";
     final String UNI2 = "\u0183";
 
-    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
-            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "가 완료됩니다. ";
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+            "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다. ";
     String oldOriginString = "";
     boolean isBold = false;
     TextView tvBold;
