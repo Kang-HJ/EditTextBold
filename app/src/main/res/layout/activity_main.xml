@@ -17,7 +17,7 @@
         android:gravity="center"
         android:text="BOLD" />
 
-    <EditText
+    <com.kkang.editorbold.BoldEditText
         android:id="@+id/et"
         android:layout_width="match_parent"
         android:layout_weight="1"

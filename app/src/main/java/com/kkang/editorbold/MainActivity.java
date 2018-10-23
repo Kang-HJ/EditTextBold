@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
     final String UNI1 = "\u0182";
     final String UNI2 = "\u0183";
 
-    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴\n대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
-            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다.";
-
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "가 완료됩니다. ";
+    String oldOriginString = "";
     boolean isBold = false;
     TextView tvBold;
     TextView tvComplete;
     TextView tvResult;
-    EditText et;
+    BoldEditText et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +73,24 @@ public class MainActivity extends AppCompatActivity {
         tvBold = (TextView) findViewById(R.id.tvBold);
         tvComplete = (TextView) findViewById(R.id.tvComplete);
         tvResult = (TextView) findViewById(R.id.tvResult);
-        et = (EditText) findViewById(R.id.et);
+        et = (BoldEditText) findViewById(R.id.et);
 
+        et.setListener(new BoldEditText.onSelectionChangedListener() {
+            @Override
+            public void onSelectionChanged(int selStart, int selEnd) {
+                boolean isBold = isBoldStyle(getOriginIdx(selStart));
+                if (MainActivity.this.isBold == isBold) {
+                    return;
+                }
+                if (isBold) {
+                    MainActivity.this.isBold = true;
+                    tvBold.setBackgroundColor(Color.BLUE);
+                } else {
+                    MainActivity.this.isBold = false;
+                    tvBold.setBackgroundColor(Color.BLACK);
+                }
+            }
+        });
         tvBold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     tvBold.setBackgroundColor(Color.BLUE);
                 }
-//                int start = getOriginIdx(et.getSelectionStart());
-//                int end = getOriginIdx(et.getSelectionEnd());
                 isBold = !isBold;
             }
         });
@@ -108,20 +122,58 @@ public class MainActivity extends AppCompatActivity {
 
         int linkOffset = 0;
         int linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-
+        if (linkGetIdx < 0) {
+            idx = idx + END_B.length();
+            if (idx > originString.length()) {
+                idx = originString.length();
+            }
+            aTagReplacePosition = originString.substring(0, idx);
+            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+        }
+        Debug(" -------------------------------------------------");
+        Debug(" aTagReplacePosition  " + aTagReplacePosition);
+        Debug(" -------------------------------------------------");
         boolean isEndBold = false;
+
         while (linkGetIdx >= 0) {
             isEndBold = false;
+
+            idx = idx + START_B.length();
             startIdx += START_B.length();
-            if (aTagReplacePosition.indexOf(END_B, linkGetIdx) >= 0) {
+            linkOffset = linkGetIdx + START_B.length();
+            int closeB = aTagReplacePosition.indexOf(END_B, linkOffset);
+            if (closeB >= 0) {
                 idx = idx + END_B.length();
-                startIdx += END_B.length();
+                startIdx = startIdx + END_B.length();
+                linkOffset = closeB + END_B.length();
                 isEndBold = true;
             }
-            idx = idx + START_B.length();
+
             aTagReplacePosition = originString.substring(0, idx);
-            linkOffset = linkGetIdx + START_B.length();
             linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+            if (linkGetIdx < 0) {
+                int _idx = idx + END_B.length();
+                if (_idx > originString.length()) {
+                    _idx = originString.length();
+                }
+                if (_idx - END_B.length() > 0) {
+                    String tagCheck2 = originString.substring(_idx - START_B.length(), _idx);
+                    if (!tagCheck2.equals(START_B)) {
+                        idx = _idx;
+                        aTagReplacePosition = originString.substring(0, idx);
+                        linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+                    }
+                }
+
+            }
+            Debug(" -------------------------------------------------");
+            try {
+                Debug(" charAt  " + originString.charAt(startIdx));
+            } catch (StringIndexOutOfBoundsException e) {
+                Debug("e  : " + e);
+            }
+            Debug(" aTagReplacePosition  " + aTagReplacePosition);
+            Debug(" -------------------------------------------------");
         }
 
         if (!isEndBold) {
@@ -131,9 +183,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        startIdx -= 1;
+        if (startIdx + 1 - START_B.length() > 0 && startIdx + 1 < originString.length()) {
+            Debug(" aTagReplacePosition  " + originString.substring(startIdx + 1 - START_B.length(), startIdx + 1));
+            if (originString.substring(startIdx - START_B.length() + 1, startIdx + 1).equals(START_B)) {
+                startIdx = startIdx - START_B.length();
+            }
+        }
 
-        Debug(" startIdx  " + startIdx);
         try {
             Debug(" charAt  " + originString.charAt(startIdx));
         } catch (StringIndexOutOfBoundsException e) {
@@ -141,6 +197,79 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return startIdx;
+    }
+
+    private boolean isBoldStyle(int idx) {
+        idx = idx - 1;
+        if (idx < 0) {
+            return false;
+        }
+        if (idx > originString.length()) {
+            return false;
+        }
+
+        Debug(" idx " + idx);
+        Debug(" charAt  " + originString.charAt(idx) + "\n\n");
+        Debug(" ============================================");
+
+        String aTagReplacePosition = originString.substring(0, idx);
+
+        int linkOffset = 0;
+        int linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+
+        boolean isBoldStyle = false;
+        while (linkGetIdx >= 0) {
+            isBoldStyle = true;
+            linkOffset = linkGetIdx + START_B.length();
+            Debug(" linkOffset " + linkOffset);
+            if (aTagReplacePosition.indexOf(END_B, linkOffset) >= 0) {
+                Debug(" linkGetIdx  END_B " + (aTagReplacePosition.indexOf(END_B, linkOffset)));
+                linkOffset = (aTagReplacePosition.indexOf(END_B, linkOffset)) + END_B.length();
+                isBoldStyle = false;
+            }
+            Debug(" linkOffset " + linkOffset);
+            Debug(" -------------------------------------------------");
+            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+        }
+
+        if (isBoldStyle) {
+            linkGetIdx = aTagReplacePosition.indexOf(END_B, linkOffset);
+            if (linkGetIdx >= 0) {
+                isBoldStyle = false;
+            }
+        }
+
+        return isBoldStyle;
+
+    }
+
+    private void boldChange(boolean boldState, int start, int end) {
+        if (boldState) {  // bold 버튼을 켰을 경우
+
+        } else {          // bold 버튼을 껐을 경우
+
+        }
+    }
+
+    private int getHtmlIdx(String str, int idx) {
+        int result = 0;
+
+        int copyStartIdx = idx;
+        int linkOffset = 0;
+        int linkGetIdx = str.indexOf(START_B, linkOffset);
+        while (linkGetIdx >= 0) {
+            copyStartIdx -= START_B.length();
+            linkOffset = linkGetIdx + START_B.length();
+            linkGetIdx = str.indexOf(START_B, linkOffset);
+        }
+        linkOffset = 0;
+        linkGetIdx = str.indexOf(END_B, linkOffset);
+        while (linkGetIdx >= 0) {
+            copyStartIdx -= END_B.length();
+            linkOffset = linkGetIdx + END_B.length();
+            linkGetIdx = str.indexOf(END_B, linkOffset);
+        }
+        return result;
     }
 
     private int start = 0;
@@ -176,12 +305,14 @@ public class MainActivity extends AppCompatActivity {
 //
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s.toString().equals(htmlText(originString).toString())) {
+                return;
+            }
+
             Debug(" s " + s);
             Debug(" start " + start);
             Debug(" before " + before);
             Debug(" count " + count);
-            Debug(" substring " + s.toString().substring(start, start + before));
-            Debug(" substring " + s.toString().substring(start, start + count));
 
             MainActivity.this.text = s;
             MainActivity.this.start = start;
@@ -191,9 +322,40 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+            if (!oldOriginString.equals(originString)) {
+                setText();
+
+                oldOriginString = originString;
+                et.setText(htmlText(originString));
+                et.setSelection(start + count);
+            }
         }
 
     };
+
+    private void setText() {
+        int _start = getOriginIdx(start);
+        int _end = getOriginIdx(start + before);
+
+        String beforeStr = originString.substring(_start, _end);
+        String afterStr = text.toString().substring(start, start + count);
+
+        Debug(" substring BEFORE  : : " + text.toString().substring(start, start + before));
+        Debug(" substring AFTER : : " + afterStr);
+        Debug(" Origin substring BEFORE : : " + beforeStr);
+
+
+        String frontStr = originString.substring(0, _start);
+        String backStr = originString.substring(_end, originString.length());
+
+        originString = frontStr + checkBoldContains(beforeStr, afterStr) + backStr;
+    }
+
+    private String checkBoldContains(String beforeStr, String afterStr) {
+        String after = afterStr;
+
+        return after;
+    }
 
     private String result(Spanned text) {
         String result = "";
@@ -214,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
     private Spanned htmlText(String str) {
 
         str = str.replace(START_BOLD, START_B).replace(END_BOLD, END_B);
+        originString = str;
         str = str.replace("\n", "<br>");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(str, Html.FROM_HTML_MODE_LEGACY);
