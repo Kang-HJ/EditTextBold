@@ -20,9 +20,21 @@
     <EditText
         android:id="@+id/et"
         android:layout_width="match_parent"
+        android:layout_weight="1"
         android:textSize="15sp"
         android:layout_height="match_parent"
         android:gravity="top"
         android:text="Hello World!" />
+
+    <TextView
+        android:id="@+id/tvComplete"
+        android:layout_width="match_parent"
+        android:textColor="@android:color/holo_red_dark"
+        android:padding="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_height="wrap_content"
+        android:text="OK" />
 
 </LinearLayout>

@@ -10,10 +10,18 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
+import static android.text.Html.FROM_HTML_MODE_COMPACT;
+import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,18 +44,21 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    final String START_BOLD = "<b>";
-    final String END_BOLD = "</b>";
+    final String START_B = "<b>";
+    final String END_B = "</b>";
 
-//    final String START_BOLD = "\u0182";
-//    final String END_BOLD = "\u0183";
+    final String START_BOLD = "<bold>";
+    final String END_BOLD = "</bold>";
 
-    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+    final String UNI1 = "\u0182";
+    final String UNI2 = "\u0183";
+
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴\n대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
             "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "가 완료됩니다.";
-    String fakeString = originString.replace(START_BOLD, "").replace(END_BOLD, "");
 
     boolean isBold = false;
     TextView tvBold;
+    TextView tvComplete;
     EditText et;
 
     @Override
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvBold = (TextView) findViewById(R.id.tvBold);
+        tvComplete = (TextView) findViewById(R.id.tvComplete);
         et = (EditText) findViewById(R.id.et);
 
         tvBold.setOnClickListener(new View.OnClickListener() {
@@ -66,46 +78,50 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     tvBold.setBackgroundColor(Color.BLUE);
                 }
-                int start = getOriginStartIdx(et.getSelectionStart());
-                int end = getOriginEndIdx(et.getSelectionEnd());
-
-                Debug(" end " + originString.charAt(end));
+//                int start = getOriginIdx(et.getSelectionStart());
+//                int end = getOriginIdx(et.getSelectionEnd());
                 isBold = !isBold;
             }
         });
 
-        et.addTextChangedListener(textWatcher);
+        tvComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Debug("result : " + result(et.getText()));
+            }
+        });
 
-        et.setText(htmlText());
+        et.setText(htmlText(originString));
+        et.addTextChangedListener(textWatcher);
     }
 
-    private int getOriginStartIdx(int idx) {
+    private int getOriginIdx(int idx) {
         int startIdx = idx;
         Debug(" idx " + idx);
         String aTagReplacePosition = originString.substring(0, idx);
 
         int linkOffset = 0;
-        int linkGetIdx = aTagReplacePosition.indexOf(START_BOLD, linkOffset);
+        int linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
 
         boolean isEndBold = false;
         while (linkGetIdx >= 0) {
             isEndBold = false;
-            startIdx += START_BOLD.length();
-            if (aTagReplacePosition.indexOf(END_BOLD, linkGetIdx) >= 0) {
-                idx = idx + END_BOLD.length();
-                startIdx += END_BOLD.length();
+            startIdx += START_B.length();
+            if (aTagReplacePosition.indexOf(END_B, linkGetIdx) >= 0) {
+                idx = idx + END_B.length();
+                startIdx += END_B.length();
                 isEndBold = true;
             }
-            idx = idx + START_BOLD.length();
+            idx = idx + START_B.length();
             aTagReplacePosition = originString.substring(0, idx);
-            linkOffset = linkGetIdx + START_BOLD.length();
-            linkGetIdx = aTagReplacePosition.indexOf(START_BOLD, linkOffset);
+            linkOffset = linkGetIdx + START_B.length();
+            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
         }
 
         if (!isEndBold) {
-            linkGetIdx = aTagReplacePosition.indexOf(END_BOLD, linkOffset);
+            linkGetIdx = aTagReplacePosition.indexOf(END_B, linkOffset);
             if (linkGetIdx >= 0) {
-                startIdx += END_BOLD.length();
+                startIdx += END_B.length();
             }
         }
 
@@ -121,11 +137,10 @@ public class MainActivity extends AppCompatActivity {
         return startIdx;
     }
 
-    private int getOriginEndIdx(int idx) {
-        int endIdx = idx;
-        return endIdx;
-    }
-
+    private int start = 0;
+    private int before = 0;
+    private int count = 0;
+    CharSequence text;
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -151,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        int before : 새 문자열 대신 삭제된 기존 문자열의 수가 들어 있다
 //
-//        int count : 새로 추가된 문자열의 수가 들어있다.
+//        int count : 새로 추가된 문자열의 수가 들어있다.encode
 //
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -159,17 +174,45 @@ public class MainActivity extends AppCompatActivity {
             Debug(" start " + start);
             Debug(" before " + before);
             Debug(" count " + count);
+            Debug(" substring " + s.toString().substring(start, start + before));
+            Debug(" substring " + s.toString().substring(start, start + count));
 
+            MainActivity.this.text = s;
+            MainActivity.this.start = start;
+            MainActivity.this.before = before;
+            MainActivity.this.count = count;
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-
         }
+
     };
 
-    private Spanned htmlText() {
-        Spanned formattedString = Html.fromHtml(originString);
+    private String result(Spanned text) {
+        String result = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.toHtml(text, FROM_HTML_MODE_COMPACT);
+        } else {
+            result = Html.toHtml(text);
+        }
+
+        result = result.replace("<p dir=\"ltr\" style=\"margin-top:0; margin-bottom:0;\">", "").replace("</p>", "");
+
+        Debug(" result 1   " + result);
+
+        result = result.replace(START_B, UNI1).replace(END_B, UNI2);
+        Spanned _result = Html.fromHtml(result);
+        result = _result.toString().replace(UNI1, START_BOLD).replace(UNI2, END_BOLD);
+
+        return result;
+    }
+
+    private Spanned htmlText(String str) {
+
+        str = str.replace(START_BOLD, START_B).replace(END_BOLD, END_B);
+
+        Spanned formattedString = Html.fromHtml(str);
         return formattedString;
     }
 }
