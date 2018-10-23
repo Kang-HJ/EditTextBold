@@ -1,6 +1,7 @@
 package com.kkang.editorbold;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -21,7 +22,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import static android.text.Html.FROM_HTML_MODE_COMPACT;
+import static android.text.Html.FROM_HTML_MODE_LEGACY;
 import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
+import static android.text.Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
     final String UNI2 = "\u0183";
 
     String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키티치 " + END_BOLD + "삼성화재 앱에서 휴\n대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
-            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "가 완료됩니다.";
+            "인증번호가 유형을 선택 후 필요서류" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다.";
 
     boolean isBold = false;
     TextView tvBold;
     TextView tvComplete;
+    TextView tvResult;
     EditText et;
 
     @Override
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         tvBold = (TextView) findViewById(R.id.tvBold);
         tvComplete = (TextView) findViewById(R.id.tvComplete);
+        tvResult = (TextView) findViewById(R.id.tvResult);
         et = (EditText) findViewById(R.id.et);
 
         tvBold.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Debug("result : " + result(et.getText()));
+                tvResult.setText(result(et.getText()));
             }
         });
 
@@ -192,13 +198,10 @@ public class MainActivity extends AppCompatActivity {
     private String result(Spanned text) {
         String result = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            result = Html.toHtml(text, FROM_HTML_MODE_COMPACT);
+            result = Html.toHtml(text, TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
         } else {
             result = Html.toHtml(text);
         }
-
-        result = result.replace("<p dir=\"ltr\" style=\"margin-top:0; margin-bottom:0;\">", "").replace("</p>", "");
-
         Debug(" result 1   " + result);
 
         result = result.replace(START_B, UNI1).replace(END_B, UNI2);
@@ -211,8 +214,11 @@ public class MainActivity extends AppCompatActivity {
     private Spanned htmlText(String str) {
 
         str = str.replace(START_BOLD, START_B).replace(END_BOLD, END_B);
-
-        Spanned formattedString = Html.fromHtml(str);
-        return formattedString;
+        str = str.replace("\n", "<br>");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(str, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(str);
+        }
     }
 }
