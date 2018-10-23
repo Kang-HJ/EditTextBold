@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
                     tvBold.setBackgroundColor(Color.BLUE);
                 }
                 isBold = !isBold;
+
+                boldChange(isBold, getOriginIdx(et.getSelectionStart()), getOriginIdx(et.getSelectionEnd()));
             }
         });
 
@@ -147,6 +149,10 @@ public class MainActivity extends AppCompatActivity {
                 startIdx = startIdx + END_B.length();
                 linkOffset = closeB + END_B.length();
                 isEndBold = true;
+            }
+
+            if (idx > originString.length()) {
+                idx = originString.length();
             }
 
             aTagReplacePosition = originString.substring(0, idx);
@@ -243,12 +249,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void boldChange(boolean boldState, int start, int end) {
+    private void boldChange(boolean boldState, int start, int end) {//getOriginIdx 거친 index값 들어와야함
+        if (start < 0) {
+            start = 0;
+        }
+        String frontStr = originString.substring(0, start);
+        String backStr = originString.substring(end, originString.length());
+        String selectStr = originString.substring(start,end);
+
+        boolean isStartBold = isBoldStyle(start);
+        boolean isEndBold = isBoldStyle(end);
+
+        Debug("isStartBold " + isStartBold);
+        Debug("isEndBold " + isEndBold);
+
         if (boldState) {  // bold 버튼을 켰을 경우
 
         } else {          // bold 버튼을 껐을 경우
-
+            if(isStartBold && isEndBold){
+                selectStr = selectStr.replace(START_B,"").replace(END_B,"");
+                selectStr = END_B + selectStr +START_B;
+            }
         }
+
+        Debug(selectStr);
+        originString = frontStr + selectStr + backStr;
+        et.setText(htmlText(originString));
     }
 
     private int getHtmlIdx(String str, int idx) {
@@ -322,13 +348,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!oldOriginString.equals(originString)) {
-                setText();
-
-                oldOriginString = originString;
-                et.setText(htmlText(originString));
-                et.setSelection(start + count);
-            }
+//            if (!oldOriginString.equals(originString)) {
+//                setText();
+//
+//                oldOriginString = originString;
+//                et.setText(htmlText(originString));
+//                et.setSelection(start + count);
+//            }
         }
 
     };

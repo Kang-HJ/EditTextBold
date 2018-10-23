@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="getOriginIdx" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="boldChange" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="CMakeSettings">
@@ -26,7 +26,6 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -52,8 +51,8 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="101" selection-start-line="101" selection-end-line="101" />
+            <state relative-caret-position="-4168">
+              <caret line="58" column="139" selection-start-line="58" selection-start-column="139" selection-end-line="58" selection-end-column="139" />
               <folding>
                 <element signature="e#2526#3157#0" expanded="true" />
                 <element signature="e#3156#3157#0" expanded="true" />
@@ -2725,13 +2724,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>180</line>
+          <line>186</line>
           <properties />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>132</line>
+          <line>134</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
@@ -3035,8 +3034,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="101" selection-start-line="101" selection-end-line="101" />
+        <state relative-caret-position="-4168">
+          <caret line="58" column="139" selection-start-line="58" selection-start-column="139" selection-end-line="58" selection-end-column="139" />
           <folding>
             <element signature="e#2526#3157#0" expanded="true" />
             <element signature="e#3156#3157#0" expanded="true" />
