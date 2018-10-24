@@ -6,8 +6,11 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="getOriginIdx" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="boldChange" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+  </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java" description="boldChange" line="233" />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -50,15 +53,15 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="613">
-              <caret line="234" column="43" lean-forward="true" selection-start-line="234" selection-start-column="43" selection-end-line="234" selection-end-column="43" />
+            <state relative-caret-position="555">
+              <caret line="233" column="27" selection-start-line="233" selection-start-column="17" selection-end-line="233" selection-end-column="27" />
               <folding>
-                <element signature="e#2531#3168#0" expanded="true" />
-                <element signature="e#3167#3168#0" expanded="true" />
-                <element signature="e#3205#3661#0" expanded="true" />
-                <element signature="e#3660#3661#0" expanded="true" />
-                <element signature="e#3703#3934#0" expanded="true" />
-                <element signature="e#3933#3934#0" expanded="true" />
+                <element signature="e#2694#3331#0" expanded="true" />
+                <element signature="e#3330#3331#0" expanded="true" />
+                <element signature="e#3368#3861#0" expanded="true" />
+                <element signature="e#3860#3861#0" expanded="true" />
+                <element signature="e#3903#4134#0" expanded="true" />
+                <element signature="e#4133#4134#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -149,6 +152,14 @@
       <find>aTagReplacePosition</find>
       <find>_sp]</find>
       <find>sp</find>
+      <find>165</find>
+      <find>getOriginIdx</find>
+      <find>index +=</find>
+      <find>b</find>
+      <find>boldChange</find>
+      <find>start</find>
+      <find>START_BOLD</find>
+      <find>result</find>
     </findStrings>
     <replaceStrings>
       <replace>END_B</replace>
@@ -2684,16 +2695,16 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32969758" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" anchor="bottom" x="137" y="164" width="1338" height="835" id="Logcat" order="7" type="FLOATING" visible="true" weight="0.32969758" />
+      <window_info active="true" anchor="bottom" x="181" y="168" width="1398" height="853" id="Logcat" order="7" type="FLOATING" visible="true" weight="0.32969758" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15548456" />
-      <window_info anchor="bottom" id="Build" order="7" weight="0.32969758" />
+      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.32969758" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Fabric" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.39960337" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39960337" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -2724,24 +2735,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>142</line>
+          <line>84</line>
           <properties />
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>157</line>
-          <properties />
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>169</line>
-          <properties />
-          <option name="timeStamp" value="46" />
+          <option name="timeStamp" value="54" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="47" />
+      <option name="time" value="55" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -2750,12 +2749,12 @@
         <state relative-caret-position="2346">
           <caret line="138" column="17" lean-forward="true" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
           <folding>
-            <element signature="e#2531#3168#0" expanded="true" />
-            <element signature="e#3167#3168#0" expanded="true" />
-            <element signature="e#3205#3661#0" expanded="true" />
-            <element signature="e#3660#3661#0" expanded="true" />
-            <element signature="e#3703#3934#0" expanded="true" />
-            <element signature="e#3933#3934#0" expanded="true" />
+            <element signature="e#2694#3331#0" expanded="true" />
+            <element signature="e#3330#3331#0" expanded="true" />
+            <element signature="e#3368#3861#0" expanded="true" />
+            <element signature="e#3860#3861#0" expanded="true" />
+            <element signature="e#3903#4134#0" expanded="true" />
+            <element signature="e#4133#4134#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3040,15 +3039,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="613">
-          <caret line="234" column="43" lean-forward="true" selection-start-line="234" selection-start-column="43" selection-end-line="234" selection-end-column="43" />
+        <state relative-caret-position="555">
+          <caret line="233" column="27" selection-start-line="233" selection-start-column="17" selection-end-line="233" selection-end-column="27" />
           <folding>
-            <element signature="e#2531#3168#0" expanded="true" />
-            <element signature="e#3167#3168#0" expanded="true" />
-            <element signature="e#3205#3661#0" expanded="true" />
-            <element signature="e#3660#3661#0" expanded="true" />
-            <element signature="e#3703#3934#0" expanded="true" />
-            <element signature="e#3933#3934#0" expanded="true" />
+            <element signature="e#2694#3331#0" expanded="true" />
+            <element signature="e#3330#3331#0" expanded="true" />
+            <element signature="e#3368#3861#0" expanded="true" />
+            <element signature="e#3860#3861#0" expanded="true" />
+            <element signature="e#3903#4134#0" expanded="true" />
+            <element signature="e#4133#4134#0" expanded="true" />
           </folding>
         </state>
       </provider>

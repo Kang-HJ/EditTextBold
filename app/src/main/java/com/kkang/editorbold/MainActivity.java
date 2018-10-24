@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     final String UNI1 = "\u0182";
     final String UNI2 = "\u0183";
 
-        String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
             "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다. ";
     //String originString = START_B + "ㄱㄷㄴ" + END_B + "ㄹㅂㅅ" + START_B + "ㅇㅈ" + END_B + "ㅊㅋ" + START_B + "ㅌㅍㅎ" + END_B + "ㄲㄸ" + START_B + "ㅆㅃ" + END_B + "ㅓㅏㅣ";
     String oldOriginString = "";
@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         et.setListener(new BoldEditText.onSelectionChangedListener() {
             @Override
             public void onSelectionChanged(int selStart, int selEnd) {
+                if (et.getSelectionEnd() - et.getSelectionStart() > 0) {
+                    selStart += 1;
+                }
                 boolean isBold = isBoldStyle(getOriginIdx(selStart));
                 if (MainActivity.this.isBold == isBold) {
                     return;
@@ -102,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 isBold = !isBold;
 
-                boldChange(isBold, getOriginIdx(et.getSelectionStart()), getOriginIdx(et.getSelectionEnd()));
+                Debug(" getSelectionEnd" + et.getSelectionStart());
+                Debug(" getSelectionEnd" + et.getSelectionEnd());
+
+                boldChange(isBold, et.getSelectionStart(), et.getSelectionEnd());
+                originString = result(et.getText()).replace(START_BOLD,START_B).replace(END_BOLD,END_B);
             }
         });
 
@@ -121,6 +128,12 @@ public class MainActivity extends AppCompatActivity {
     private int getOriginIdx(int idx) {
         Debug(" idx " + idx);
         Debug(" originString " + originString);
+        Debug(" originString  length  " + originString.length());
+        Debug(" originString  replace   length  " + originString.replace(START_B, "").replace(END_B, "").length());
+
+        if (idx == originString.replace(START_B, "").replace(END_B, "").length()) {
+            return originString.length();
+        }
 
         int originIdx = 0;
         int index = 0;
@@ -129,17 +142,18 @@ public class MainActivity extends AppCompatActivity {
         String[] _sp = originString.split(END_B);
         for (int i = 0; i < _sp.length; i++) {
             Debug(" i " + i + " : " + _sp[i]);
+            breakI = i;
             String sp = _sp[i];
 
             if (sp.contains(START_B)) {
                 index += (sp.length() - START_B.length());
+            } else {
+                index += (sp.length());
             }
             if (idx <= index) {
-                breakI = i;
                 break;
             }
-                originIdx += sp.length();
-
+            originIdx += sp.length();
             originIdx += END_B.length();
 
         }
@@ -156,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < _sp1.length; i++) {
             Debug("result  : : " + result + " i " + i + " : " + _sp1[i]);
 
-            if (_sp1[i].length() > result) {
+            if (_sp1[i].length() >= result) {
                 try {
                     originIdx += result;
-                    Debug(" i " + i + " charAt : " + _sp1[i].charAt(result));
-                    Debug(" originIdx " + originIdx + " charAt : " + originString.charAt(originIdx));
+                    Debug(" i " + i + " charAt : " + _sp1[i].charAt(result - 1));
+                    Debug(" originIdx " + originIdx + " charAt : " + originString.charAt(originIdx - 1));
                 } catch (StringIndexOutOfBoundsException e) {
                     Debug("e !!!!!!!!! result  : " + result);
                 }
@@ -175,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isBoldStyle(int idx) {
-        idx = idx - 1;
+
         if (idx < 0) {
             return false;
         }
@@ -184,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Debug(" idx " + idx);
-        Debug(" charAt  " + originString.charAt(idx) + "\n\n");
         Debug(" ============================================");
 
         String aTagReplacePosition = originString.substring(0, idx);
@@ -219,9 +232,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void boldChange(boolean boldState, int start, int end) {//getOriginIdx 거친 index값 들어와야함
+        int beforeStart = 0;
+        int nextEnd = originString.length();
+        if (start - 1 >= 0) {
+            beforeStart = getOriginIdx(start - 1);
+        }
+
+        if (end + 1 <= originString.length()) {
+            nextEnd = getOriginIdx(end - 1);
+        }
+        boolean isBeforeChareBold = isBoldStyle(beforeStart);
+        boolean isNextChareBold = isBoldStyle(nextEnd);
+
+        start = getOriginIdx(start);
+        end = getOriginIdx(end);
+
         if (start < 0) {
             start = 0;
         }
+
+        Debug("##################################################################");
+        Debug("start " + start);
+        Debug("end " + end);
+
+        Debug("isBeforeChareBold " + isBeforeChareBold);
+        Debug("isNextChareBold " + isNextChareBold);
+
+
         String frontStr = originString.substring(0, start);
         String backStr = originString.substring(end, originString.length());
         String selectStr = originString.substring(start, end);
@@ -229,25 +266,57 @@ public class MainActivity extends AppCompatActivity {
         boolean isStartBold = isBoldStyle(start);
         boolean isEndBold = isBoldStyle(end);
 
-        Debug("isStartBold " + isStartBold);
+        Debug("boldState " + boldState);
         Debug("isEndBold " + isEndBold);
 
+        Debug("frontStr " + frontStr);
+        Debug("selectStr " + selectStr);
+        Debug("backStr " + backStr);
+
+
         if (boldState) {  // bold 버튼을 켰을 경우
-            if (!isStartBold && !isEndBold) {
+            if (!isEndBold) {
                 selectStr = START_B + selectStr + END_B;
+            } else {
+                selectStr = selectStr.replace(START_B, "").replace(END_B, "");
+                selectStr = START_B + selectStr;
             }
 
         } else {          // bold 버튼을 껐을 경우
-            if (isStartBold && isEndBold) {
-                selectStr = selectStr.replace(START_B, "").replace(END_B, "");
-                selectStr = END_B + selectStr + START_B;
+            selectStr = selectStr.replace(START_B, "").replace(END_B, "");
+            if (isEndBold) {
+                if (isBeforeChareBold) {//selectStr 앞글자가 볼드알경우
+                    if (isNextChareBold) {
+                        selectStr = END_B + selectStr + START_B;
+                    } else {
+                        selectStr = END_B + selectStr;
+                    }
+                } else {
+                    if (isNextChareBold) {
+                        selectStr = selectStr + START_B;
+                    }
+                }
+            } else {
+                if (isBeforeChareBold) {
+                    selectStr = END_B + selectStr;
+                    if (isNextChareBold) {
+                        selectStr += START_B;
+                    }
+
+                } else {
+                    if(isNextChareBold){
+                        selectStr += START_B;
+                    }
+                }
             }
         }
 
-        Debug(selectStr);
+        Debug("CHANGE selectStr : : " + selectStr);
         originString = frontStr + selectStr + backStr;
 
-        Debug("originString " + originString);
+        originString = originString.replace(START_B + END_B, "");
+
+        Debug("RESURT >>> originString " + originString);
         et.setText(htmlText(originString));
     }
 
@@ -305,9 +374,9 @@ public class MainActivity extends AppCompatActivity {
 //
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.toString().equals(htmlText(originString).toString())) {
-                return;
-            }
+//            if (s.toString().equals(htmlText(originString).toString())) {
+//                return;
+//            }
 
             Debug(" s " + s);
             Debug(" start " + start);
@@ -329,6 +398,7 @@ public class MainActivity extends AppCompatActivity {
 //                et.setText(htmlText(originString));
 //                et.setSelection(start + count);
 //            }
+
         }
 
     };
