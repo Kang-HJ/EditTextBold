@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     final String UNI1 = "\u0182";
     final String UNI2 = "\u0183";
 
-    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+        String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
             "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다. ";
+    //String originString = START_B + "ㄱㄷㄴ" + END_B + "ㄹㅂㅅ" + START_B + "ㅇㅈ" + END_B + "ㅊㅋ" + START_B + "ㅌㅍㅎ" + END_B + "ㄲㄸ" + START_B + "ㅆㅃ" + END_B + "ㅓㅏㅣ";
     String oldOriginString = "";
     boolean isBold = false;
     TextView tvBold;
@@ -118,91 +119,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getOriginIdx(int idx) {
-        int startIdx = idx;
         Debug(" idx " + idx);
-        String aTagReplacePosition = originString.substring(0, idx);
+        Debug(" originString " + originString);
 
-        int linkOffset = 0;
-        int linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-        if (linkGetIdx < 0) {
-            idx = idx + END_B.length();
-            if (idx > originString.length()) {
-                idx = originString.length();
+        int originIdx = 0;
+        int index = 0;
+        int breakI = 0;
+
+        String[] _sp = originString.split(END_B);
+        for (int i = 0; i < _sp.length; i++) {
+            Debug(" i " + i + " : " + _sp[i]);
+            String sp = _sp[i];
+
+            if (sp.contains(START_B)) {
+                index += (sp.length() - START_B.length());
             }
-            aTagReplacePosition = originString.substring(0, idx);
-            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
+            if (idx <= index) {
+                breakI = i;
+                break;
+            }
+                originIdx += sp.length();
+
+            originIdx += END_B.length();
+
         }
+
+        Debug(" breakI : : " + breakI);
+        Debug(" index : : " + index);
+        Debug(" idx : : " + idx);
+
+        int result = _sp[breakI].replace(START_B, "").length() - (index - idx);
+
+        Debug(" result : : " + result);
         Debug(" -------------------------------------------------");
-        Debug(" aTagReplacePosition  " + aTagReplacePosition);
-        Debug(" -------------------------------------------------");
-        boolean isEndBold = false;
+        String _sp1[] = _sp[breakI].split(START_B);
+        for (int i = 0; i < _sp1.length; i++) {
+            Debug("result  : : " + result + " i " + i + " : " + _sp1[i]);
 
-        while (linkGetIdx >= 0) {
-            isEndBold = false;
-
-            idx = idx + START_B.length();
-            startIdx += START_B.length();
-            linkOffset = linkGetIdx + START_B.length();
-            int closeB = aTagReplacePosition.indexOf(END_B, linkOffset);
-            if (closeB >= 0) {
-                idx = idx + END_B.length();
-                startIdx = startIdx + END_B.length();
-                linkOffset = closeB + END_B.length();
-                isEndBold = true;
-            }
-
-            if (idx > originString.length()) {
-                idx = originString.length();
-            }
-
-            aTagReplacePosition = originString.substring(0, idx);
-            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-            if (linkGetIdx < 0) {
-                int _idx = idx + END_B.length();
-                if (_idx > originString.length()) {
-                    _idx = originString.length();
+            if (_sp1[i].length() > result) {
+                try {
+                    originIdx += result;
+                    Debug(" i " + i + " charAt : " + _sp1[i].charAt(result));
+                    Debug(" originIdx " + originIdx + " charAt : " + originString.charAt(originIdx));
+                } catch (StringIndexOutOfBoundsException e) {
+                    Debug("e !!!!!!!!! result  : " + result);
                 }
-                if (_idx - END_B.length() > 0) {
-                    String tagCheck2 = originString.substring(_idx - START_B.length(), _idx);
-                    if (!tagCheck2.equals(START_B)) {
-                        idx = _idx;
-                        aTagReplacePosition = originString.substring(0, idx);
-                        linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-                    }
-                }
-
-            }
-            Debug(" -------------------------------------------------");
-            try {
-                Debug(" charAt  " + originString.charAt(startIdx));
-            } catch (StringIndexOutOfBoundsException e) {
-                Debug("e  : " + e);
-            }
-            Debug(" aTagReplacePosition  " + aTagReplacePosition);
-            Debug(" -------------------------------------------------");
-        }
-
-        if (!isEndBold) {
-            linkGetIdx = aTagReplacePosition.indexOf(END_B, linkOffset);
-            if (linkGetIdx >= 0) {
-                startIdx += END_B.length();
+                break;
+            } else {
+                originIdx += _sp1[i].length();
+                originIdx += START_B.length();
+                result -= _sp1[i].length();
             }
         }
-
-        if (startIdx + 1 - START_B.length() > 0 && startIdx + 1 < originString.length()) {
-            Debug(" aTagReplacePosition  " + originString.substring(startIdx + 1 - START_B.length(), startIdx + 1));
-            if (originString.substring(startIdx - START_B.length() + 1, startIdx + 1).equals(START_B)) {
-                startIdx = startIdx - START_B.length();
-            }
-        }
-
-        try {
-            Debug(" charAt  " + originString.charAt(startIdx));
-        } catch (StringIndexOutOfBoundsException e) {
-            Debug("e  : " + e);
-        }
-
-        return startIdx;
+        return originIdx;
     }
 
     private boolean isBoldStyle(int idx) {
@@ -255,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         }
         String frontStr = originString.substring(0, start);
         String backStr = originString.substring(end, originString.length());
-        String selectStr = originString.substring(start,end);
+        String selectStr = originString.substring(start, end);
 
         boolean isStartBold = isBoldStyle(start);
         boolean isEndBold = isBoldStyle(end);
@@ -264,16 +233,21 @@ public class MainActivity extends AppCompatActivity {
         Debug("isEndBold " + isEndBold);
 
         if (boldState) {  // bold 버튼을 켰을 경우
+            if (!isStartBold && !isEndBold) {
+                selectStr = START_B + selectStr + END_B;
+            }
 
         } else {          // bold 버튼을 껐을 경우
-            if(isStartBold && isEndBold){
-                selectStr = selectStr.replace(START_B,"").replace(END_B,"");
-                selectStr = END_B + selectStr +START_B;
+            if (isStartBold && isEndBold) {
+                selectStr = selectStr.replace(START_B, "").replace(END_B, "");
+                selectStr = END_B + selectStr + START_B;
             }
         }
 
         Debug(selectStr);
         originString = frontStr + selectStr + backStr;
+
+        Debug("originString " + originString);
         et.setText(htmlText(originString));
     }
 

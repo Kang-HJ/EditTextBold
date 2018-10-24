@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="boldChange" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="getOriginIdx" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="CMakeSettings">
@@ -20,7 +20,6 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.6/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
@@ -51,15 +50,15 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4168">
-              <caret line="58" column="139" selection-start-line="58" selection-start-column="139" selection-end-line="58" selection-end-column="139" />
+            <state relative-caret-position="613">
+              <caret line="234" column="43" lean-forward="true" selection-start-line="234" selection-start-column="43" selection-end-line="234" selection-end-column="43" />
               <folding>
-                <element signature="e#2526#3157#0" expanded="true" />
-                <element signature="e#3156#3157#0" expanded="true" />
-                <element signature="e#3194#3671#0" expanded="true" />
-                <element signature="e#3670#3671#0" expanded="true" />
-                <element signature="e#3713#3944#0" expanded="true" />
-                <element signature="e#3943#3944#0" expanded="true" />
+                <element signature="e#2531#3168#0" expanded="true" />
+                <element signature="e#3167#3168#0" expanded="true" />
+                <element signature="e#3205#3661#0" expanded="true" />
+                <element signature="e#3660#3661#0" expanded="true" />
+                <element signature="e#3703#3934#0" expanded="true" />
+                <element signature="e#3933#3934#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -148,6 +147,8 @@
       <find>idx</find>
       <find>closeB</find>
       <find>aTagReplacePosition</find>
+      <find>_sp]</find>
+      <find>sp</find>
     </findStrings>
     <replaceStrings>
       <replace>END_B</replace>
@@ -2671,7 +2672,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1680" y="-360" width="1920" height="2137" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2724,18 +2724,24 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>186</line>
+          <line>142</line>
           <properties />
-          <option name="timeStamp" value="9" />
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
-          <line>134</line>
+          <line>157</line>
           <properties />
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java</url>
+          <line>169</line>
+          <properties />
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="33" />
+      <option name="time" value="47" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -2744,12 +2750,12 @@
         <state relative-caret-position="2346">
           <caret line="138" column="17" lean-forward="true" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
           <folding>
-            <element signature="e#2526#3157#0" expanded="true" />
-            <element signature="e#3156#3157#0" expanded="true" />
-            <element signature="e#3194#3671#0" expanded="true" />
-            <element signature="e#3670#3671#0" expanded="true" />
-            <element signature="e#3713#3944#0" expanded="true" />
-            <element signature="e#3943#3944#0" expanded="true" />
+            <element signature="e#2531#3168#0" expanded="true" />
+            <element signature="e#3167#3168#0" expanded="true" />
+            <element signature="e#3205#3661#0" expanded="true" />
+            <element signature="e#3660#3661#0" expanded="true" />
+            <element signature="e#3703#3934#0" expanded="true" />
+            <element signature="e#3933#3934#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3034,15 +3040,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4168">
-          <caret line="58" column="139" selection-start-line="58" selection-start-column="139" selection-end-line="58" selection-end-column="139" />
+        <state relative-caret-position="613">
+          <caret line="234" column="43" lean-forward="true" selection-start-line="234" selection-start-column="43" selection-end-line="234" selection-end-column="43" />
           <folding>
-            <element signature="e#2526#3157#0" expanded="true" />
-            <element signature="e#3156#3157#0" expanded="true" />
-            <element signature="e#3194#3671#0" expanded="true" />
-            <element signature="e#3670#3671#0" expanded="true" />
-            <element signature="e#3713#3944#0" expanded="true" />
-            <element signature="e#3943#3944#0" expanded="true" />
+            <element signature="e#2531#3168#0" expanded="true" />
+            <element signature="e#3167#3168#0" expanded="true" />
+            <element signature="e#3205#3661#0" expanded="true" />
+            <element signature="e#3660#3661#0" expanded="true" />
+            <element signature="e#3703#3934#0" expanded="true" />
+            <element signature="e#3933#3934#0" expanded="true" />
           </folding>
         </state>
       </provider>
