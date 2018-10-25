@@ -10,7 +10,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java" description="boldChange" line="233" />
+    <bookmark url="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java" description="boldChange" line="232" />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -53,8 +53,8 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="273" column="36" lean-forward="true" selection-start-line="273" selection-start-column="36" selection-end-line="273" selection-end-column="36" />
+            <state relative-caret-position="597">
+              <caret line="289" column="77" selection-start-line="289" selection-start-column="77" selection-end-line="289" selection-end-column="77" />
               <folding>
                 <element signature="e#2694#3331#0" expanded="true" />
                 <element signature="e#3330#3331#0" expanded="true" />
@@ -157,10 +157,11 @@
       <find>index +=</find>
       <find>b</find>
       <find>boldChange</find>
-      <find>start</find>
       <find>START_BOLD</find>
       <find>result</find>
       <find>필요서류</find>
+      <find>isEndBold</find>
+      <find>start</find>
     </findStrings>
     <replaceStrings>
       <replace>END_B</replace>
@@ -2684,6 +2685,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1680" y="-360" width="1920" height="2137" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -2696,7 +2698,7 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32969758" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" anchor="bottom" x="181" y="168" width="1398" height="853" id="Logcat" order="7" type="FLOATING" visible="true" weight="0.32969758" />
+      <window_info active="true" anchor="bottom" x="99" y="149" width="1398" height="853" id="Logcat" order="7" type="FLOATING" visible="true" weight="0.32969758" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -3040,8 +3042,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kkang/editorbold/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="273" column="36" lean-forward="true" selection-start-line="273" selection-start-column="36" selection-end-line="273" selection-end-column="36" />
+        <state relative-caret-position="597">
+          <caret line="289" column="77" selection-start-line="289" selection-start-column="77" selection-end-line="289" selection-end-column="77" />
           <folding>
             <element signature="e#2694#3331#0" expanded="true" />
             <element signature="e#3330#3331#0" expanded="true" />

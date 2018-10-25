@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 Debug(" getSelectionEnd" + et.getSelectionEnd());
 
                 boldChange(isBold, et.getSelectionStart(), et.getSelectionEnd());
-                originString = result(et.getText()).replace(START_BOLD,START_B).replace(END_BOLD,END_B);
             }
         });
 
@@ -231,21 +230,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void boldChange(boolean boldState, int start, int end) {//getOriginIdx 거친 index값 들어와야함
+    private void boldChange(boolean boldState, int startSelection, int endSelection) {//getOriginIdx 거친 index값 들어와야함
         int beforeStart = 0;
         int nextEnd = originString.length();
-        if (start - 1 >= 0) {
-            beforeStart = getOriginIdx(start - 1);
+        if (startSelection - 1 >= 0) {
+            beforeStart = getOriginIdx(startSelection - 1);
         }
 
-        if (end + 1 <= originString.length()) {
-            nextEnd = getOriginIdx(end - 1);
+        if (endSelection + 1 <= originString.length()) {
+            nextEnd = getOriginIdx(endSelection - 1);
         }
         boolean isBeforeChareBold = isBoldStyle(beforeStart);
         boolean isNextChareBold = isBoldStyle(nextEnd);
 
-        start = getOriginIdx(start);
-        end = getOriginIdx(end);
+        int start = getOriginIdx(startSelection);
+        int end = getOriginIdx(endSelection);
 
         if (start < 0) {
             start = 0;
@@ -260,8 +259,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         String frontStr = originString.substring(0, start);
-        String backStr = originString.substring(end, originString.length());
         String selectStr = originString.substring(start, end);
+        String backStr = originString.substring(end, originString.length());
+
 
         boolean isStartBold = isBoldStyle(start);
         boolean isEndBold = isBoldStyle(end);
@@ -277,15 +277,31 @@ public class MainActivity extends AppCompatActivity {
         if (boldState) {  // bold 버튼을 켰을 경우
             selectStr = selectStr.replace(START_B, "").replace(END_B, "");
             if (!isEndBold) {
-                if(isBeforeChareBold){
-                    selectStr = selectStr + END_B;
-                }else{
-                    selectStr = START_B + selectStr + END_B;
+                if (isBeforeChareBold) {
+
+                    if (!isNextChareBold) {
+                        selectStr = selectStr + END_B;
+                    }
+
+                    Debug("  " + frontStr.substring(start-1-END_B.length(), start));
+                    Debug("start-END_B.length() " + (start-END_B.length()));
+                    String fronStrEnd = frontStr.substring(start-1-END_B.length(), start);
+                    fronStrEnd = fronStrEnd.replace(" ","").replace("\n","");
+
+                    if(start-END_B.length() > 0 && fronStrEnd.substring(fronStrEnd.length()-END_B.length(), fronStrEnd.length()).equals(END_B)){
+
+                        selectStr = START_B + selectStr;
+                    }
+                } else {
+                    selectStr = START_B + selectStr;
+                    if (!isNextChareBold) {
+                        selectStr += END_B;
+                    }
                 }
 
             } else {
                 selectStr = START_B + selectStr;
-                if(!isNextChareBold){
+                if (!isNextChareBold) {
                     selectStr = START_B + selectStr + END_B;
                 }
             }
@@ -312,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    if(isNextChareBold){
+                    if (isNextChareBold) {
                         selectStr += START_B;
                     }
                 }
@@ -322,10 +338,17 @@ public class MainActivity extends AppCompatActivity {
         Debug("CHANGE selectStr : : " + selectStr);
         originString = frontStr + selectStr + backStr;
 
-        originString = originString.replace(START_B + END_B, "");
-
-        Debug("RESURT >>> originString " + originString);
+        Spanned sp = htmlText(originString);
+        originString = result(sp).replace(START_BOLD, START_B).replace(END_BOLD, END_B);
+        while (originString.contains(START_B + END_B) || originString.contains(END_B + START_B) || originString.contains(START_B + START_B) || originString.contains(END_B + END_B)) {
+            originString = originString.replace(END_B + START_B, "");
+            originString = originString.replace(START_B + END_B, "");
+            originString = originString.replace(START_B + START_B, START_B);
+            originString = originString.replace(END_B + END_B, END_B);
+        }
         et.setText(htmlText(originString));
+        et.setSelection(endSelection);
+        Debug("RESURT >>> originString " + originString);
     }
 
     private int getHtmlIdx(String str, int idx) {
