@@ -275,11 +275,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (boldState) {  // bold 버튼을 켰을 경우
+            selectStr = selectStr.replace(START_B, "").replace(END_B, "");
             if (!isEndBold) {
-                selectStr = START_B + selectStr + END_B;
+                if(isBeforeChareBold){
+                    selectStr = selectStr + END_B;
+                }else{
+                    selectStr = START_B + selectStr + END_B;
+                }
+
             } else {
-                selectStr = selectStr.replace(START_B, "").replace(END_B, "");
                 selectStr = START_B + selectStr;
+                if(!isNextChareBold){
+                    selectStr = START_B + selectStr + END_B;
+                }
             }
 
         } else {          // bold 버튼을 껐을 경우
