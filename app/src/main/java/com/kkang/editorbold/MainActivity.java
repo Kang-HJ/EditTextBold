@@ -430,6 +430,10 @@ public class MainActivity extends AppCompatActivity {
 //                et.setSelection(start + count);
 //            }
 
+
+            Debug(" originString >>  " + result(s));
+
+
         }
 
     };
