@@ -57,17 +57,75 @@ public class MainActivity extends AppCompatActivity {
     Icarus icarus;
     TextViewButton boldButton;
 
-    //HashMap<String, TextView> generalButtons;
+
+    boolean isBold = false;
+
+    final String START_B = "<b>";
+    final String END_B = "</b>";
+
+    final String START_BOLD = "<bold>";
+    final String END_BOLD = "</bold>";
+
+    final String UNI1 = "\u0182";
+    final String UNI2 = "\u0183";
+    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
+            "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + "\n가 완료됩니다" + END_BOLD + "\n\n";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setUI();
+        setView();
+        setEvent();
+    }
+
+    private void setUI() {
+        editor = (WebView) findViewById(R.id.editor);
+
         tvBold = (TextView) findViewById(R.id.tvBold);
         tvState = (TextView) findViewById(R.id.tvState);
         tvLeft = (TextView) findViewById(R.id.tvLeft);
         tvCenter = (TextView) findViewById(R.id.tvCenter);
         tvRight = (TextView) findViewById(R.id.tvRight);
+    }
 
+    private void setView() {
+
+        TextViewToolbar toolbar = new TextViewToolbar();
+        Options options = new Options();
+        options.setPlaceholder("Placeholder...");
+        icarus = new Icarus(toolbar, options, editor);
+
+        boldButton = new TextViewButton(tvBold, icarus);
+        boldButton.setName(NAME_BOLD);
+        toolbar.addButton(boldButton);
+        icarus.loadCSS("file:///android_asset/editor.css");
+        icarus.loadJs("file:///android_asset/test.js");
+        icarus.render();
+
+        EditText et = new EditText(MainActivity.this);
+        et.setText(htmlText(originString));
+
+        icarus.setContent(result2(et.getText()));
+
+    }
+
+    private void setEvent() {
+        editor.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isBold == boldButton.isActivated()) {
+                    return false;
+                }
+                isBold = boldButton.isActivated();
+                Log.d("content", "isBold : : " + isBold);
+                //Toast.makeText(MainActivity.this, ""+boldButton.isActivated(), Toast.LENGTH_SHORT ).show();
+
+                return false;
+            }
+        });
         tvState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,68 +217,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        editor = (WebView) findViewById(R.id.editor);
-
-        editor.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (isBold == boldButton.isActivated()) {
-                    return false;
-                }
-                isBold = boldButton.isActivated();
-                Log.d("content", "isBold : : " + isBold);
-                //Toast.makeText(MainActivity.this, ""+boldButton.isActivated(), Toast.LENGTH_SHORT ).show();
-
-                return false;
-            }
-        });
-
-        TextViewToolbar toolbar = new TextViewToolbar();
-        Options options = new Options();
-        options.setPlaceholder("Placeholder...");
-        icarus = new Icarus(toolbar, options, editor);
-
-        //  generalButtons = new HashMap<>();
-
-
-        //generalButtons.put(NAME_BOLD, tvBold);
-//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_LEFT, tvLeft);
-//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_CENTER, tvCenter);
-//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_RIGHT, tvRight);
-
-        //for (String name : generalButtons.keySet()) {
-//            TextView tv = (TextView) generalButtons.get(name);
-//            if (tv == null) {
-//                continue;
-//            }
-        boldButton = new TextViewButton(tvBold, icarus);
-        boldButton.setName(NAME_BOLD);
-        toolbar.addButton(boldButton);
-        //}
-
-        icarus.loadCSS("file:///android_asset/editor.css");
-        icarus.loadJs("file:///android_asset/test.js");
-        icarus.render();
-
-        EditText et = new EditText(MainActivity.this);
-        et.setText(htmlText(originString));
-
-        icarus.setContent(result2(et.getText()));
     }
-
-    boolean isBold = false;
-
-    final String START_B = "<b>";
-    final String END_B = "</b>";
-
-    final String START_BOLD = "<bold>";
-    final String END_BOLD = "</bold>";
-
-    final String UNI1 = "\u0182";
-    final String UNI2 = "\u0183";
-    String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
-            "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + "\n가 완료됩니다" + END_BOLD + "\n\n";
 
     private String result(String str) {
         //Spanned text = (Spanned) str;
