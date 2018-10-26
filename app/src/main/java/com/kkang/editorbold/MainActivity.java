@@ -1,33 +1,31 @@
 package com.kkang.editorbold;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import com.github.mr5.icarus.Callback;
+import com.github.mr5.icarus.Icarus;
+import com.github.mr5.icarus.TextViewToolbar;
+import com.github.mr5.icarus.button.TextViewButton;
+import com.github.mr5.icarus.entity.Options;
 
-import static android.text.Html.FROM_HTML_MODE_COMPACT;
-import static android.text.Html.FROM_HTML_MODE_LEGACY;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.text.Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE;
-import static android.text.Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
+import static com.github.mr5.icarus.button.Button.NAME_BOLD;
+
 
 public class MainActivity extends AppCompatActivity {
-
     public void Debug(String msg) {
         Log.d("KKANG", buildLogMsg(msg));
     }
@@ -47,6 +45,172 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+
+    TextView tvBold;
+    TextView tvState;
+    TextView tvLeft;
+    TextView tvCenter;
+    TextView tvRight;
+
+    WebView editor;
+
+    Icarus icarus;
+    TextViewButton boldButton;
+
+    //HashMap<String, TextView> generalButtons;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tvBold = (TextView) findViewById(R.id.tvBold);
+        tvState = (TextView) findViewById(R.id.tvState);
+        tvLeft = (TextView) findViewById(R.id.tvLeft);
+        tvCenter = (TextView) findViewById(R.id.tvCenter);
+        tvRight = (TextView) findViewById(R.id.tvRight);
+
+        tvState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d("content", params);
+                        try {
+                            JSONObject jo = new JSONObject(params);
+                            String gg = jo.optString("content");
+                            Log.d("result", result(gg));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        tvLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (icarus == null) {
+                    return;
+                }
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d("content", params);
+                        try {
+                            JSONObject jo = new JSONObject(params);
+                            String gg = jo.optString("content");
+                            String ss = gg.replace("<p>", "<p style=\"text-align: left;\">");
+                            ss = ss.replace("<p style=\"text-align: right;\">", "<p style=\"text-align: left;\">");
+                            ss = ss.replace("<p style=\"text-align: center;\">", "<p style=\"text-align: left;\">");
+                            icarus.setContent(ss);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        tvCenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d("content", params);
+                        try {
+                            JSONObject jo = new JSONObject(params);
+                            String gg = jo.optString("content");
+                            String ss = gg.replace("<p>", "<p style=\"text-align: center;\">");
+                            ss = ss.replace("<p style=\"text-align: right;\">", "<p style=\"text-align: center;\">");
+                            ss = ss.replace("<p style=\"text-align: left;\">", "<p style=\"text-align: center;\">");
+                            icarus.setContent(ss);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (icarus == null) {
+                    return;
+                }
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d("content", params);
+                        try {
+                            JSONObject jo = new JSONObject(params);
+                            String gg = jo.optString("content");
+                            String ss = gg.replace("<p>", "<p style=\"text-align: right;\">");
+                            ss = ss.replace("<p style=\"text-align: left;\">", "<p style=\"text-align: right;\">");
+                            ss = ss.replace("<p style=\"text-align: center;\">", "<p style=\"text-align: right;\">");
+                            icarus.setContent(ss);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+
+        editor = (WebView) findViewById(R.id.editor);
+
+        editor.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (isBold == boldButton.isActivated()) {
+                    return false;
+                }
+                isBold = boldButton.isActivated();
+                Log.d("content", "isBold : : " + isBold);
+                //Toast.makeText(MainActivity.this, ""+boldButton.isActivated(), Toast.LENGTH_SHORT ).show();
+
+                return false;
+            }
+        });
+
+        TextViewToolbar toolbar = new TextViewToolbar();
+        Options options = new Options();
+        options.setPlaceholder("Placeholder...");
+        icarus = new Icarus(toolbar, options, editor);
+
+        //  generalButtons = new HashMap<>();
+
+
+        //generalButtons.put(NAME_BOLD, tvBold);
+//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_LEFT, tvLeft);
+//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_CENTER, tvCenter);
+//        generalButtons.put(com.github.mr5.icarus.button.Button.NAME_ALIGN_RIGHT, tvRight);
+
+        //for (String name : generalButtons.keySet()) {
+//            TextView tv = (TextView) generalButtons.get(name);
+//            if (tv == null) {
+//                continue;
+//            }
+        boldButton = new TextViewButton(tvBold, icarus);
+        boldButton.setName(NAME_BOLD);
+        toolbar.addButton(boldButton);
+        //}
+
+        icarus.loadCSS("file:///android_asset/editor.css");
+        icarus.loadJs("file:///android_asset/test.js");
+        icarus.render();
+
+        EditText et = new EditText(MainActivity.this);
+        et.setText(htmlText(originString));
+
+        icarus.setContent(result2(et.getText()));
+    }
+
+    boolean isBold = false;
+
     final String START_B = "<b>";
     final String END_B = "</b>";
 
@@ -55,425 +219,39 @@ public class MainActivity extends AppCompatActivity {
 
     final String UNI1 = "\u0182";
     final String UNI2 = "\u0183";
-
     String originString = "사가다자바하라아나파차타 " + START_BOLD + "비지디기시히리이니미키\n티치 " + END_BOLD + "삼성화재 앱에서 휴대폰번호를 버튼을 눌러주세요." + START_BOLD + "본인인증을 진행해주세요." + END_BOLD +
-            "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + END_BOLD + "\n가 완료됩니다. ";
-    //String originString = START_B + "ㄱㄷㄴ" + END_B + "ㄹㅂㅅ" + START_B + "ㅇㅈ" + END_B + "ㅊㅋ" + START_B + "ㅌㅍㅎ" + END_B + "ㄲㄸ" + START_B + "ㅆㅃ" + END_B + "ㅓㅏㅣ";
-    String oldOriginString = "";
-    boolean isBold = false;
-    TextView tvBold;
-    TextView tvComplete;
-    TextView tvResult;
-    BoldEditText et;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        tvBold = (TextView) findViewById(R.id.tvBold);
-        tvComplete = (TextView) findViewById(R.id.tvComplete);
-        tvResult = (TextView) findViewById(R.id.tvResult);
-        et = (BoldEditText) findViewById(R.id.et);
-
-        et.setListener(new BoldEditText.onSelectionChangedListener() {
-            @Override
-            public void onSelectionChanged(int selStart, int selEnd) {
-                if (et.getSelectionEnd() - et.getSelectionStart() > 0) {
-                    selStart += 1;
-                }
-                boolean isBold = isBoldStyle(getOriginIdx(selStart));
-                if (MainActivity.this.isBold == isBold) {
-                    return;
-                }
-                if (isBold) {
-                    MainActivity.this.isBold = true;
-                    tvBold.setBackgroundColor(Color.BLUE);
-                } else {
-                    MainActivity.this.isBold = false;
-                    tvBold.setBackgroundColor(Color.BLACK);
-                }
-            }
-        });
-        tvBold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isBold) {
-                    tvBold.setBackgroundColor(Color.BLACK);
-                } else {
-                    tvBold.setBackgroundColor(Color.BLUE);
-                }
-                isBold = !isBold;
-
-                Debug(" getSelectionEnd" + et.getSelectionStart());
-                Debug(" getSelectionEnd" + et.getSelectionEnd());
-
-                boldChange(isBold, et.getSelectionStart(), et.getSelectionEnd());
-            }
-        });
-
-        tvComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Debug("result : " + result(et.getText()));
-                tvResult.setText(result(et.getText()));
-            }
-        });
-
-        et.setText(htmlText(originString));
-        et.addTextChangedListener(textWatcher);
-    }
-
-    private int getOriginIdx(int idx) {
-        Debug(" idx " + idx);
-        Debug(" originString " + originString);
-        Debug(" originString  length  " + originString.length());
-        Debug(" originString  replace   length  " + originString.replace(START_B, "").replace(END_B, "").length());
-
-        if (idx == originString.replace(START_B, "").replace(END_B, "").length()) {
-            return originString.length();
-        }
-
-        int originIdx = 0;
-        int index = 0;
-        int breakI = 0;
-
-        String[] _sp = originString.split(END_B);
-        for (int i = 0; i < _sp.length; i++) {
-            Debug(" i " + i + " : " + _sp[i]);
-            breakI = i;
-            String sp = _sp[i];
-
-            if (sp.contains(START_B)) {
-                index += (sp.length() - START_B.length());
-            } else {
-                index += (sp.length());
-            }
-            if (idx <= index) {
-                break;
-            }
-            originIdx += sp.length();
-            originIdx += END_B.length();
-
-        }
-
-        Debug(" breakI : : " + breakI);
-        Debug(" index : : " + index);
-        Debug(" idx : : " + idx);
-
-        int result = _sp[breakI].replace(START_B, "").length() - (index - idx);
-
-        Debug(" result : : " + result);
-        Debug(" -------------------------------------------------");
-        String _sp1[] = _sp[breakI].split(START_B);
-        for (int i = 0; i < _sp1.length; i++) {
-            Debug("result  : : " + result + " i " + i + " : " + _sp1[i]);
-
-            if (_sp1[i].length() >= result) {
-                try {
-                    originIdx += result;
-                    Debug(" i " + i + " charAt : " + _sp1[i].charAt(result - 1));
-                    Debug(" originIdx " + originIdx + " charAt : " + originString.charAt(originIdx - 1));
-                } catch (StringIndexOutOfBoundsException e) {
-                    Debug("e !!!!!!!!! result  : " + result);
-                }
-                break;
-            } else {
-                originIdx += _sp1[i].length();
-                originIdx += START_B.length();
-                result -= _sp1[i].length();
-            }
-        }
-        return originIdx;
-    }
-
-    private boolean isBoldStyle(int idx) {
-
-        if (idx < 0) {
-            return false;
-        }
-        if (idx > originString.length()) {
-            return false;
-        }
-
-        Debug(" idx " + idx);
-        Debug(" ============================================");
-
-        String aTagReplacePosition = originString.substring(0, idx);
-
-        int linkOffset = 0;
-        int linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-
-        boolean isBoldStyle = false;
-        while (linkGetIdx >= 0) {
-            isBoldStyle = true;
-            linkOffset = linkGetIdx + START_B.length();
-            Debug(" linkOffset " + linkOffset);
-            if (aTagReplacePosition.indexOf(END_B, linkOffset) >= 0) {
-                Debug(" linkGetIdx  END_B " + (aTagReplacePosition.indexOf(END_B, linkOffset)));
-                linkOffset = (aTagReplacePosition.indexOf(END_B, linkOffset)) + END_B.length();
-                isBoldStyle = false;
-            }
-            Debug(" linkOffset " + linkOffset);
-            Debug(" -------------------------------------------------");
-            linkGetIdx = aTagReplacePosition.indexOf(START_B, linkOffset);
-        }
-
-        if (isBoldStyle) {
-            linkGetIdx = aTagReplacePosition.indexOf(END_B, linkOffset);
-            if (linkGetIdx >= 0) {
-                isBoldStyle = false;
-            }
-        }
-
-        return isBoldStyle;
-
-    }
-
-    private void boldChange(boolean boldState, int startSelection, int endSelection) {//getOriginIdx 거친 index값 들어와야함
-        int beforeStart = 0;
-        int nextEnd = originString.length();
-        if (startSelection - 1 >= 0) {
-            beforeStart = getOriginIdx(startSelection - 1);
-        }
-
-        if (endSelection + 1 <= originString.length()) {
-            nextEnd = getOriginIdx(endSelection - 1);
-        }
-        boolean isBeforeChareBold = isBoldStyle(beforeStart);
-        boolean isNextChareBold = isBoldStyle(nextEnd);
-
-        int start = getOriginIdx(startSelection);
-        int end = getOriginIdx(endSelection);
-
-        if (start < 0) {
-            start = 0;
-        }
-
-        Debug("##################################################################");
-        Debug("start " + start);
-        Debug("end " + end);
-
-        Debug("isBeforeChareBold " + isBeforeChareBold);
-        Debug("isNextChareBold " + isNextChareBold);
-
-
-        String frontStr = originString.substring(0, start);
-        String selectStr = originString.substring(start, end);
-        String backStr = originString.substring(end, originString.length());
-
-
-        boolean isStartBold = isBoldStyle(start);
-        boolean isEndBold = isBoldStyle(end);
-
-        Debug("boldState " + boldState);
-        Debug("isEndBold " + isEndBold);
-
-        Debug("frontStr " + frontStr);
-        Debug("selectStr " + selectStr);
-        Debug("backStr " + backStr);
-
-
-        if (boldState) {  // bold 버튼을 켰을 경우
-            selectStr = selectStr.replace(START_B, "").replace(END_B, "");
-            if (!isEndBold) {
-                if (isBeforeChareBold) {
-
-                    if (!isNextChareBold) {
-                        selectStr = selectStr + END_B;
-                    }
-
-                    Debug("  " + frontStr.substring(start-1-END_B.length(), start));
-                    Debug("start-END_B.length() " + (start-END_B.length()));
-                    String fronStrEnd = frontStr.substring(start-1-END_B.length(), start);
-                    fronStrEnd = fronStrEnd.replace(" ","").replace("\n","");
-
-                    if(start-END_B.length() > 0 && fronStrEnd.substring(fronStrEnd.length()-END_B.length(), fronStrEnd.length()).equals(END_B)){
-
-                        selectStr = START_B + selectStr;
-                    }
-                } else {
-                    selectStr = START_B + selectStr;
-                    if (!isNextChareBold) {
-                        selectStr += END_B;
-                    }
-                }
-
-            } else {
-                selectStr = START_B + selectStr;
-                if (!isNextChareBold) {
-                    selectStr = START_B + selectStr + END_B;
-                }
-            }
-
-        } else {          // bold 버튼을 껐을 경우
-            selectStr = selectStr.replace(START_B, "").replace(END_B, "");
-            if (isEndBold) {
-                if (isBeforeChareBold) {//selectStr 앞글자가 볼드알경우
-                    if (isNextChareBold) {
-                        selectStr = END_B + selectStr + START_B;
-                    } else {
-                        selectStr = END_B + selectStr;
-                    }
-                } else {
-                    if (isNextChareBold) {
-                        selectStr = selectStr + START_B;
-                    }
-                }
-            } else {
-                if (isBeforeChareBold) {
-                    selectStr = END_B + selectStr;
-                    if (isNextChareBold) {
-                        selectStr += START_B;
-                    }
-
-                } else {
-                    if (isNextChareBold) {
-                        selectStr += START_B;
-                    }
-                }
-            }
-        }
-
-        Debug("CHANGE selectStr : : " + selectStr);
-        originString = frontStr + selectStr + backStr;
-
-        Spanned sp = htmlText(originString);
-        originString = result(sp).replace(START_BOLD, START_B).replace(END_BOLD, END_B);
-        while (originString.contains(START_B + END_B) || originString.contains(END_B + START_B) || originString.contains(START_B + START_B) || originString.contains(END_B + END_B)) {
-            originString = originString.replace(END_B + START_B, "");
-            originString = originString.replace(START_B + END_B, "");
-            originString = originString.replace(START_B + START_B, START_B);
-            originString = originString.replace(END_B + END_B, END_B);
-        }
-        et.setText(htmlText(originString));
-        et.setSelection(endSelection);
-        Debug("RESURT >>> originString " + originString);
-    }
-
-    private int getHtmlIdx(String str, int idx) {
-        int result = 0;
-
-        int copyStartIdx = idx;
-        int linkOffset = 0;
-        int linkGetIdx = str.indexOf(START_B, linkOffset);
-        while (linkGetIdx >= 0) {
-            copyStartIdx -= START_B.length();
-            linkOffset = linkGetIdx + START_B.length();
-            linkGetIdx = str.indexOf(START_B, linkOffset);
-        }
-        linkOffset = 0;
-        linkGetIdx = str.indexOf(END_B, linkOffset);
-        while (linkGetIdx >= 0) {
-            copyStartIdx -= END_B.length();
-            linkOffset = linkGetIdx + END_B.length();
-            linkGetIdx = str.indexOf(END_B, linkOffset);
-        }
-        return result;
-    }
-
-    private int start = 0;
-    private int before = 0;
-    private int count = 0;
-    CharSequence text;
-
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-//         CharSequence s : 현재 에디트텍스트에 입력된 문자열을 담고 있다.
-//
-//        int start : s 에 저장된 문자열 내에 새로 추가될 문자열의 위치값을 담고있다.
-//
-//        int count : s 에 담긴 문자열 가운데 새로 사용자가 입력할 문자열에 의해 변경될 문자열의 수가 담겨있다.
-//
-//        int after : 새로 추가될 문자열의 수
-
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            Debug(" s " + s);
-            Debug(" start " + start);
-            Debug(" count " + count);
-            Debug(" after " + after);
-        }
-
-        @Override
-//        CharSequence s : 사용자가 새로 입력한 문자열을 포함한 에디트텍스트의 문자열이 들어있음
-//
-//        int start : 새로 추가된 문자열의 시작 위치의 값
-//
-//        int before : 새 문자열 대신 삭제된 기존 문자열의 수가 들어 있다
-//
-//        int count : 새로 추가된 문자열의 수가 들어있다.encode
-//
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            if (s.toString().equals(htmlText(originString).toString())) {
-//                return;
-//            }
-
-            Debug(" s " + s);
-            Debug(" start " + start);
-            Debug(" before " + before);
-            Debug(" count " + count);
-
-            MainActivity.this.text = s;
-            MainActivity.this.start = start;
-            MainActivity.this.before = before;
-            MainActivity.this.count = count;
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-//            if (!oldOriginString.equals(originString)) {
-//                setText();
-//
-//                oldOriginString = originString;
-//                et.setText(htmlText(originString));
-//                et.setSelection(start + count);
-//            }
-
-
-            Debug(" originString >>  " + result(s));
-
-
-        }
-
-    };
-
-    private void setText() {
-        int _start = getOriginIdx(start);
-        int _end = getOriginIdx(start + before);
-
-        String beforeStr = originString.substring(_start, _end);
-        String afterStr = text.toString().substring(start, start + count);
-
-        Debug(" substring BEFORE  : : " + text.toString().substring(start, start + before));
-        Debug(" substring AFTER : : " + afterStr);
-        Debug(" Origin substring BEFORE : : " + beforeStr);
-
-
-        String frontStr = originString.substring(0, _start);
-        String backStr = originString.substring(_end, originString.length());
-
-        originString = frontStr + checkBoldContains(beforeStr, afterStr) + backStr;
-    }
-
-    private String checkBoldContains(String beforeStr, String afterStr) {
-        String after = afterStr;
-
-        return after;
-    }
-
-    private String result(Spanned text) {
+            "인증번호가 유형을 선택 후 필요서류\n" + START_BOLD + "를 등록하시면 보험금 청구" + "\n가 완료됩니다" + END_BOLD + "\n\n";
+
+    private String result(String str) {
+        //Spanned text = (Spanned) str;
+        EditText et = new EditText(MainActivity.this);
+        et.setText(htmlText(str));
+        Spanned text = et.getText();
         String result = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             result = Html.toHtml(text, TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
         } else {
             result = Html.toHtml(text);
         }
-        Debug(" result 1   " + result);
-
         result = result.replace(START_B, UNI1).replace(END_B, UNI2);
         Spanned _result = Html.fromHtml(result);
         result = _result.toString().replace(UNI1, START_BOLD).replace(UNI2, END_BOLD);
+
+
+        return result;
+    }
+
+    private String result2(Spanned text) {
+        String result = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.toHtml(text, TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
+        } else {
+            result = Html.toHtml(text);
+        }
+        //result = result.replace(START_B, UNI1).replace(END_B, UNI2);
+        //Spanned _result = Html.fromHtml(result);
+        //result = _result.toString().replace(UNI1, START_BOLD).replace(UNI2, END_BOLD);
+
 
         return result;
     }
@@ -481,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
     private Spanned htmlText(String str) {
 
         str = str.replace(START_BOLD, START_B).replace(END_BOLD, END_B);
-        originString = str;
         str = str.replace("\n", "<br>");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(str, Html.FROM_HTML_MODE_LEGACY);

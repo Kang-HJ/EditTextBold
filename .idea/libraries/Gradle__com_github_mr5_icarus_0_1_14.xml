@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.mr5:icarus-0.1.14">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/icarus-0.1.14.aar/f02a91da1abd463c30b792609a5549e6/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/icarus-0.1.14.aar/f02a91da1abd463c30b792609a5549e6/jars/libs/tbs_sdk_v1.5.1.1057_25436_obfs_20160331_144900.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/icarus-0.1.14.aar/f02a91da1abd463c30b792609a5549e6/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.mr5/icarus/0.1.14/7d8d26aa4f576e924946569fb8a983d6dfe2f626/icarus-0.1.14-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
